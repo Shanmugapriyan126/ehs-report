@@ -19,6 +19,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      VITE_API_URL: ${{ vars.VITE_API_URL }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -31,6 +34,14 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Verify API configuration
+        run: |
+          if [ -z "$VITE_API_URL" ]; then
+            echo "ERROR: VITE_API_URL is not configured."
+            exit 1
+          fi
+          echo "VITE_API_URL is configured."
 
       - name: Build application
         run: npm run build
